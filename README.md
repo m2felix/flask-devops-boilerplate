@@ -33,6 +33,6 @@ A production-ready Python Flask app with a full DevOps pipeline:
 
 ### Clone the repo
 ```bash
-git clone https://github.com/yourusername/flask-devops-boilerplate.git
+git clone git@github.com:m2felix/flask-devops-boilerplate.git
 cd flask-devops-boilerplate
 
