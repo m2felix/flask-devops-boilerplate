@@ -1,4 +1,5 @@
 # Essential Docker and Docker Compose Commands with Usage Context
+http://localhost:5050 --> The local website for this project.
 
 1. docker build -t <image_name> .
    When: When you want to create or update your Docker image from your Dockerfile with the latest code and dependencies.
