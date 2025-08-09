@@ -1,0 +1,73 @@
+# Essential Docker and Docker Compose Commands with Usage Context
+
+1. docker build -t <image_name> .
+   When: When you want to create or update your Docker image from your Dockerfile with the latest code and dependencies.
+   What: Builds the Docker image and tags it with <image_name>.
+
+2. docker-compose build --no-cache
+   When: When you want a completely fresh build without using cached layers, typically after major code changes or dependency updates.
+   What: Rebuilds all services in your docker-compose.yml from scratch.
+
+3. docker-compose up
+   When: When you want to start your app’s containers (and build them if needed). Good for running your app locally or in dev.
+   What: Builds (if necessary) and runs your containers, showing logs in your terminal.
+
+4. docker-compose up --build
+   When: When you want to force rebuilding images before starting containers, useful to ensure you’re running latest changes.
+   What: Builds images then starts containers fresh.
+
+5. docker-compose down
+   When: When you want to stop and remove all containers, networks, and default volumes created by your docker-compose setup. Useful for cleanup.
+   What: Shuts down your app environment completely.
+
+6. docker ps
+   When: When you want to check which Docker containers are currently running on your machine.
+   What: Lists running containers.
+
+7. docker ps -a
+   When: When you want to see all containers including stopped ones, useful for troubleshooting or cleaning up.
+   What: Lists all containers with their status.
+
+8. docker logs <container_id_or_name>
+   When: When you need to view the logs/output of a specific container to debug or monitor it.
+   What: Shows the container’s logs.
+
+9. docker exec -it <container_id_or_name> /bin/bash
+   When: When you want to open an interactive shell inside a running container for debugging or inspecting files.
+   What: Gives you terminal access inside the container.
+
+10. docker stop <container_id_or_name>
+    When: When you want to stop a running container without deleting it, so you can start it later.
+    What: Stops the container process.
+
+11. docker rm <container_id_or_name>
+    When: When you want to delete a stopped container to free resources or clean up.
+    What: Removes the container permanently.
+
+12. docker system prune -a --volumes --force
+    When: When you want to clean up all unused Docker resources — containers, images, volumes, networks — to reclaim disk space.
+    What: Deletes unused Docker data; use with caution.
+
+13. docker images
+    When: When you want to see all Docker images stored locally.
+    What: Lists your images.
+
+14. docker rmi <image_id_or_name>
+    When: When you want to remove a specific Docker image that you no longer need.
+    What: Deletes the image.
+
+15. docker-compose logs
+    When: When you want to view combined logs of all services started via docker-compose.
+    What: Displays logs from all containers defined in your compose file.
+
+16. docker-compose restart
+    When: When you want to restart your running services without rebuilding images.
+    What: Stops then starts containers again.
+
+17. docker-compose config
+    When: When you want to check the final merged and validated configuration that docker-compose will use (handy for debugging your compose file).
+    What: Prints your composed configuration.
+
+---
+
+
