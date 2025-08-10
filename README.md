@@ -36,6 +36,7 @@ A production-ready Python Flask app with a full DevOps pipeline:
 git clone git@github.com:m2felix/flask-devops-boilerplate.git
 cd flask-devops-boilerplate
 
+##
 This project is a Flask-based DevOps boilerplate that gives a ready-to-use starting point for building and deploying Python web apps.
 It’s fully Dockerized, comes with GitHub Actions CI for automated testing, includes Bash scripts for build and deployment, and is structured for easy scaling with future support for monitoring and Kubernetes.
 
