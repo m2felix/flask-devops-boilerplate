@@ -1,12 +1,21 @@
-FROM python:3.9-slim
+# Use the official Python image
+FROM python:3.11-slim
 
+# Set working directory
 WORKDIR /app
 
-RUN pip install flask
+# Copy only requirements first for caching benefits
+COPY app/requirements.txt app/requirements.txt
 
-COPY . .
+# Install dependencies
+RUN pip install --no-cache-dir -r app/requirements.txt
 
-EXPOSE 5000
+# Copy the rest of the application code
+COPY app/ app/
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run tests during build (optional, you can remove this for speed)
+# RUN pytest app/test_app.py
+
+# Default command
+CMD ["python", "app/main.py"]
 

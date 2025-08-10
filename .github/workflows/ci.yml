@@ -25,11 +25,11 @@ jobs:
       - name: Build Docker images
         run: docker-compose build --no-cache
 
-      # Run tests inside the container
+      # Run tests inside the container (ensure pytest is installed in image)
       - name: Run pytest inside container
-        run: docker-compose run --rm web sh -c "pytest app/test_app.py"
+        run: docker-compose run --rm web sh -c "pip show pytest && pytest app/test_app.py"
 
-      # (Optional) Shut down containers and clean up
+      # Shut down containers and clean up
       - name: Shut down Docker Compose
         run: docker-compose down
 
