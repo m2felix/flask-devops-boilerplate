@@ -1,92 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 DevOps Flask App</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #141e30, #243b55);
-            color: white;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(6px);
-            animation: fadeIn 1.2s ease-in-out;
-            max-width: 500px;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        p.subtitle {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-        button {
-            background: linear-gradient(90deg, #4cafef, #2196f3);
-            border: none;
-            color: white;
-            padding: 12px 28px;
-            font-size: 1rem;
-            margin-top: 15px;
-            cursor: pointer;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
-        }
-        #quote {
-            margin-top: 20px;
-            font-style: italic;
-            color: #f0f0f0;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        footer {
-            margin-top: 30px;
-            font-size: 0.85rem;
-            color: #aaa;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🚀 Hello from DevOps Flask App!</h1>
-        <p class="subtitle">Deployed via Docker & GitHub Actions CI/CD</p>
-        <button onclick="getQuote()">Get a Random Quote</button>
-        <p id="quote"></p>
-        <footer>Made with ❤️ using Flask</footer>
-    </div>
+from flask import Flask, jsonify
+from datetime import datetime
 
-    <script>
-        async function getQuote() {
-            let res = await fetch('/api/random-quote');
-            let data = await res.json();
-            let quoteEl = document.getElementById('quote');
-            quoteEl.innerText = `"${data.quote}"`;
-            quoteEl.style.opacity = 1; // fade in
-        }
-    </script>
-</body>
-</html>
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return jsonify({"message": "🚀 Hello from DevOps Flask App!"})
+
+@app.route('/api/health')
+def health_check():
+    return jsonify({
+        "status": "healthy",
+        "service": "DevOps Flask App",
+        "uptime": "OK"
+    })
+
+@app.route('/api/time')
+def current_time():
+    now = datetime.utcnow()
+    return jsonify({
+        "current_time_utc": now.strftime("%Y-%m-%d %H:%M:%S UTC")
+    })
+
+# Keep your random quote endpoint if you already have it
+@app.route('/api/random-quote')
+def random_quote():
+    import random
+    quotes = [
+        "The best way to get started is to quit talking and begin doing.",
+        "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+        "Don’t let yesterday take up too much of today."
+    ]
+    return jsonify({"quote": random.choice(quotes)})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 
