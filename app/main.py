@@ -1,25 +1,34 @@
 from flask import Flask, jsonify, render_template
+from datetime import datetime
 import random
 
 app = Flask(__name__)
 
-# HTML landing page
-@app.route("/")
+@app.route('/')
 def home():
     return render_template("index.html")
 
-# Original API
-@app.route("/api/message")
-def api_message():
-    return jsonify({"message": "🚀 Hello from DevOps Flask App!"})
+@app.route('/api/health')
+def health_check():
+    return jsonify({
+        "status": "healthy",
+        "service": "DevOps Flask App",
+        "uptime": "OK"
+    })
 
-# New random quote API
-@app.route("/api/random-quote")
+@app.route('/api/time')
+def current_time():
+    now = datetime.utcnow()
+    return jsonify({
+        "current_time_utc": now.strftime("%Y-%m-%d %H:%M:%S UTC")
+    })
+
+@app.route('/api/random-quote')
 def random_quote():
     quotes = [
-        "Code is like humor. When you have to explain it, it’s bad.",
-        "In a world of bits and bytes, be the algorithm.",
-        "Ship it. Then improve it."
+        "The best way to get started is to quit talking and begin doing.",
+        "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+        "Don’t let yesterday take up too much of today."
     ]
     return jsonify({"quote": random.choice(quotes)})
 
