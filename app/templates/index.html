@@ -37,6 +37,16 @@
         button:hover {
             background-color: #379add;
         }
+        #status {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .healthy {
+            color: lightgreen;
+        }
+        .unhealthy {
+            color: red;
+        }
         footer {
             margin-top: 50px;
             font-size: 0.9rem;
@@ -56,7 +66,7 @@
     <button onclick="getStatus()">Check Health</button>
     <p id="status"></p>
 
-    <footer>Made with ❤️ using Flask</footer>
+    <footer>Made by Mike with ❤️ using Flask</footer>
 
     <script>
         async function getQuote() {
@@ -66,9 +76,18 @@
         }
 
         async function getStatus() {
-            let res = await fetch('/health');
+            let res = await fetch('/api/health'); // ✅ Corrected endpoint
             let data = await res.json();
-            document.getElementById('status').innerText =
+            let statusElement = document.getElementById('status');
+
+            // Color-coded display
+            if (data.status === "healthy") {
+                statusElement.className = "healthy";
+            } else {
+                statusElement.className = "unhealthy";
+            }
+
+            statusElement.innerText = 
                 `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
         }
     </script>
