@@ -12,6 +12,7 @@
             text-align: center;
             margin: 0;
             padding: 50px;
+            transition: background 1s ease;
         }
         h1 {
             font-size: 2.5rem;
@@ -27,19 +28,24 @@
             color: white;
             padding: 12px 24px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
             font-size: 1rem;
             margin-top: 20px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #379add;
         }
+        #quote {
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
         #status {
             font-size: 1rem;
             margin-top: 10px;
+            font-weight: bold;
         }
         .healthy {
             color: lightgreen;
@@ -72,19 +78,26 @@
         async function getQuote() {
             let res = await fetch('/api/random-quote');
             let data = await res.json();
-            document.getElementById('quote').innerText = `"${data.quote}"`;
+            let quoteElement = document.getElementById('quote');
+            
+            quoteElement.style.opacity = 0; // fade out before updating
+            setTimeout(() => {
+                quoteElement.innerText = `"${data.quote}"`;
+                quoteElement.style.opacity = 1; // fade in
+            }, 300);
         }
 
         async function getStatus() {
-            let res = await fetch('/api/health'); // ✅ Corrected endpoint
+            let res = await fetch('/api/health');
             let data = await res.json();
             let statusElement = document.getElementById('status');
 
-            // Color-coded display
             if (data.status === "healthy") {
                 statusElement.className = "healthy";
+                document.body.style.background = "linear-gradient(to right, #1e3c72, #2a5298)";
             } else {
                 statusElement.className = "unhealthy";
+                document.body.style.background = "linear-gradient(to right, #8e0e00, #1f1c18)";
             }
 
             statusElement.innerText = 
