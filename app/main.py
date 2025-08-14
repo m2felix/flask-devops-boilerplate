@@ -1,8 +1,19 @@
 from flask import Flask, jsonify, render_template
 from datetime import datetime
-import random, psutil
+import random
+import psutil
+import time
 
 app = Flask(__name__)
+
+# Simple in-memory metrics
+request_count = 0
+last_reset_time = time.time()
+
+@app.before_request
+def before_request_func():
+    global request_count
+    request_count += 1
 
 @app.route('/')
 def home():
@@ -11,16 +22,6 @@ def home():
 @app.route('/dashboard')
 def dashboard():
     return render_template("dashboard.html")
-
-@app.route('/api/system-stats')
-def system_stats():
-    return jsonify({
-        "cpu": psutil.cpu_percent(),
-        "memory": psutil.virtual_memory().percent,
-        "requests_sec": random.randint(10, 50),  # Simulated
-        "errors": random.randint(0, 2),          # Simulated
-        "response_time": f"{random.randint(80, 200)} ms"
-    })
 
 @app.route('/api/health')
 def health_check():
@@ -45,6 +46,36 @@ def random_quote():
         "Don’t let yesterday take up too much of today."
     ]
     return jsonify({"quote": random.choice(quotes)})
+
+@app.route('/api/system-stats')
+def system_stats():
+    global request_count, last_reset_time
+
+    # CPU & Memory usage from psutil
+    cpu_usage = psutil.cpu_percent(interval=0.2)
+    memory_usage = psutil.virtual_memory().percent
+
+    # Requests/sec calculation
+    now = time.time()
+    elapsed = now - last_reset_time
+    requests_per_sec = request_count / elapsed if elapsed > 0 else 0
+
+    # Reset every 10 seconds
+    if elapsed >= 10:
+        request_count = 0
+        last_reset_time = now
+
+    # Mock error and response time values
+    errors = 0  # You could track real errors later
+    response_time = round(random.uniform(80, 200), 2)  # ms
+
+    return jsonify({
+        "cpu": cpu_usage,
+        "memory": memory_usage,
+        "requests_sec": round(requests_per_sec, 2),
+        "errors": errors,
+        "response_time": response_time
+    })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
