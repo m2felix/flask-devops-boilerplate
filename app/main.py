@@ -1,12 +1,26 @@
 from flask import Flask, jsonify, render_template
 from datetime import datetime
-import random
+import random, psutil
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return render_template("index.html")
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route('/api/system-stats')
+def system_stats():
+    return jsonify({
+        "cpu": psutil.cpu_percent(),
+        "memory": psutil.virtual_memory().percent,
+        "requests_sec": random.randint(10, 50),  # Simulated
+        "errors": random.randint(0, 2),          # Simulated
+        "response_time": f"{random.randint(80, 200)} ms"
+    })
 
 @app.route('/api/health')
 def health_check():

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 System Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 { color: #4cafef; }
+        .metric {
+            margin: 15px auto;
+            width: 80%;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: left;
+        }
+        .bar {
+            height: 25px;
+            background: #4cafef;
+            text-align: right;
+            padding-right: 5px;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Live System Dashboard</h1>
+
+    <div>
+        <h3>CPU Usage</h3>
+        <div class="metric"><div id="cpu-bar" class="bar">0%</div></div>
+
+        <h3>Memory Usage</h3>
+        <div class="metric"><div id="memory-bar" class="bar">0%</div></div>
+
+        <h3>Requests/sec</h3>
+        <p id="requests">0</p>
+
+        <h3>Errors</h3>
+        <p id="errors">0</p>
+
+        <h3>Response Time</h3>
+        <p id="response-time">0 ms</p>
+    </div>
+
+    <script>
+        async function fetchStats() {
+            let res = await fetch('/api/system-stats');
+            let data = await res.json();
+
+            document.getElementById('cpu-bar').style.width = data.cpu + "%";
+            document.getElementById('cpu-bar').innerText = data.cpu + "%";
+
+            document.getElementById('memory-bar').style.width = data.memory + "%";
+            document.getElementById('memory-bar').innerText = data.memory + "%";
+
+            document.getElementById('requests').innerText = data.requests_sec;
+            document.getElementById('errors').innerText = data.errors;
+            document.getElementById('response-time').innerText = data.response_time;
+        }
+
+        setInterval(fetchStats, 2000);
+        fetchStats();
+    </script>
+</body>
+</html>
+
