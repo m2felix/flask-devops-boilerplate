@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #1a1a1a, #3a3a3a);
+            background: linear-gradient(to right, #1a1a1a, #3a3a3a); /* Always blue gradient */
             color: white;
             text-align: center;
             margin: 0;
             padding: 50px;
-            transition: background 0.5s ease; /* Smooth transition */
+            transition: background 0.5s ease;
         }
         h1 {
             font-size: 2.5rem;
@@ -92,23 +92,18 @@
                 let res = await fetch('/api/health');
                 let data = await res.json();
 
-                // Update status text
-                document.getElementById('status').innerText =
-                    `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
+                // Keep gradient background always blue
+                document.body.style.background = "linear-gradient(to right, #1a1a1a, #3a3a3a)";
 
-                // Change background dynamically
-                if (data.status === "healthy") {
-                    document.body.style.background = "linear-gradient(to right, #1a1a1a, #3a3a3a)";
-                    document.getElementById('status').style.color = "lightgreen";
-                } else {
-                    document.body.style.background = "linear-gradient(to right, #3a0000, #800000)";
-                    document.getElementById('status').style.color = "red";
-                }
+                // Change only text color based on health
+                let statusEl = document.getElementById('status');
+                statusEl.innerText = `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
+                statusEl.style.color = (data.status === "healthy") ? "lightgreen" : "red";
 
             } catch (err) {
-                document.getElementById('status').innerText = "⚠️ Health check failed.";
-                document.body.style.background = "linear-gradient(to right, #3a0000, #800000)";
-                document.getElementById('status').style.color = "red";
+                let statusEl = document.getElementById('status');
+                statusEl.innerText = "⚠️ Health check failed.";
+                statusEl.style.color = "red";
             }
         }
     </script>
