@@ -12,6 +12,7 @@
             text-align: center;
             margin: 0;
             padding: 50px;
+            transition: background 0.5s ease; /* Smooth transition */
         }
         h1 {
             font-size: 2.5rem;
@@ -50,6 +51,10 @@
             font-size: 0.9rem;
             color: #888;
         }
+        #status {
+            font-weight: bold;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -84,12 +89,26 @@
 
         async function getStatus() {
             try {
-                let res = await fetch('/api/health'); // ✅ Correct endpoint
+                let res = await fetch('/api/health');
                 let data = await res.json();
+
+                // Update status text
                 document.getElementById('status').innerText =
                     `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
+
+                // Change background dynamically
+                if (data.status === "healthy") {
+                    document.body.style.background = "linear-gradient(to right, #1a1a1a, #3a3a3a)";
+                    document.getElementById('status').style.color = "lightgreen";
+                } else {
+                    document.body.style.background = "linear-gradient(to right, #3a0000, #800000)";
+                    document.getElementById('status').style.color = "red";
+                }
+
             } catch (err) {
                 document.getElementById('status').innerText = "⚠️ Health check failed.";
+                document.body.style.background = "linear-gradient(to right, #3a0000, #800000)";
+                document.getElementById('status').style.color = "red";
             }
         }
     </script>
