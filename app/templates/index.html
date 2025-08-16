@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #1a1a1a, #3a3a3a); /* Always blue gradient */
+            background: linear-gradient(to right, #1a1a1a, #3a3a3a); /* fallback */
+            background: linear-gradient(to right, #1e3c72, #2a5298); /* blue gradient */
             color: white;
             text-align: center;
             margin: 0;
             padding: 50px;
-            transition: background 0.5s ease;
         }
         h1 {
             font-size: 2.5rem;
@@ -34,26 +34,24 @@
             margin-top: 20px;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #379add;
         }
+        footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
         .dashboard-btn {
             background-color: #28a745;
-            margin-left: 10px;
         }
         .dashboard-btn:hover {
             background-color: #218838;
         }
-        footer {
-            margin-top: 50px;
-            font-size: 0.9rem;
-            color: #888;
-        }
         #status {
             font-weight: bold;
-            margin-top: 15px;
+            color: #00ff66; /* bold green for health check */
         }
     </style>
 </head>
@@ -78,33 +76,16 @@
 
     <script>
         async function getQuote() {
-            try {
-                let res = await fetch('/api/random-quote');
-                let data = await res.json();
-                document.getElementById('quote').innerText = `"${data.quote}"`;
-            } catch (err) {
-                document.getElementById('quote').innerText = "⚠️ Failed to fetch quote.";
-            }
+            let res = await fetch('/api/random-quote');
+            let data = await res.json();
+            document.getElementById('quote').innerText = `"${data.quote}"`;
         }
 
         async function getStatus() {
-            try {
-                let res = await fetch('/api/health');
-                let data = await res.json();
-
-                // Keep gradient background always blue
-                document.body.style.background = "linear-gradient(to right, #1a1a1a, #3a3a3a)";
-
-                // Change only text color based on health
-                let statusEl = document.getElementById('status');
-                statusEl.innerText = `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
-                statusEl.style.color = (data.status === "healthy") ? "lightgreen" : "red";
-
-            } catch (err) {
-                let statusEl = document.getElementById('status');
-                statusEl.innerText = "⚠️ Health check failed.";
-                statusEl.style.color = "red";
-            }
+            let res = await fetch('/api/health');
+            let data = await res.json();
+            document.getElementById('status').innerText =
+                `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
         }
     </script>
 </body>
