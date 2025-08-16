@@ -33,20 +33,22 @@
             margin-top: 20px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #379add;
+        }
+        .dashboard-btn {
+            background-color: #28a745;
+            margin-left: 10px;
+        }
+        .dashboard-btn:hover {
+            background-color: #218838;
         }
         footer {
             margin-top: 50px;
             font-size: 0.9rem;
             color: #888;
-        }
-        .dashboard-btn {
-            background-color: #28a745;
-        }
-        .dashboard-btn:hover {
-            background-color: #218838;
         }
     </style>
 </head>
@@ -71,16 +73,24 @@
 
     <script>
         async function getQuote() {
-            let res = await fetch('/api/random-quote');
-            let data = await res.json();
-            document.getElementById('quote').innerText = `"${data.quote}"`;
+            try {
+                let res = await fetch('/api/random-quote');
+                let data = await res.json();
+                document.getElementById('quote').innerText = `"${data.quote}"`;
+            } catch (err) {
+                document.getElementById('quote').innerText = "⚠️ Failed to fetch quote.";
+            }
         }
 
         async function getStatus() {
-            let res = await fetch('/api/health');
-            let data = await res.json();
-            document.getElementById('status').innerText =
-                `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
+            try {
+                let res = await fetch('/api/health'); // ✅ Correct endpoint
+                let data = await res.json();
+                document.getElementById('status').innerText =
+                    `Status: ${data.status}, Service: ${data.service}, Uptime: ${data.uptime}`;
+            } catch (err) {
+                document.getElementById('status').innerText = "⚠️ Health check failed.";
+            }
         }
     </script>
 </body>
