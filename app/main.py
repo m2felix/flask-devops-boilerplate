@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, render_template
 from datetime import datetime
 import random
-import psutil
-import time
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)  # <-- enables /metrics endpoint
 
 # Simple in-memory metrics
 request_count = 0
